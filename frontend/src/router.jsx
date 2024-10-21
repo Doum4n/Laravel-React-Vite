@@ -1,11 +1,49 @@
 import {createBrowserRouter} from 'react-router-dom'
 import Home from './views/home.jsx';
-import Layout from './views/layout.jsx';
+import UserLayout from './views/userLayout.jsx';
+import GuestLayput from './views/guestLayout.jsx';
+import Register from './views/register.jsx';
+import Login from './views/login.jsx';
+import Account from './views/account.jsx';
+import Post from './views/post.jsx';
+import UploadFile from './views/uploadfile.jsx';
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <Layout/>,
+        element: <UserLayout/>,
+        children: [
+            {
+                path: '/home',
+                element: <Home/>,
+            },
+        ],
+    },
+    {
+        path: '/',
+        element: <GuestLayput/>,
+        children: [
+            {
+                path: '/login',
+                element: <Login/>,
+            },
+            {
+                path: '/register',
+                element: <Register/>
+            },
+            {
+                path: '/post/:id',
+                element: <Post/>
+            }
+        ],
+    },
+    {
+        path: 'account',
+        element: <Account/>
+    },
+    {
+        path: 'upload',
+        element: <UploadFile/>
     }
 ])
 

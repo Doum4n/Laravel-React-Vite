@@ -51,6 +51,18 @@ services:
                 - '-p${DB_PASSWORD}'
             retries: 3
             timeout: 5s
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        restart: always
+        ports:
+            - "8080:80"
+        environment:
+            PMA_HOST: mysql      # Kết nối tới service MySQL có tên là "mysql"
+            PMA_PORT: 3306       # Cổng MySQL
+        networks:
+            - sail
+
     redis:
         image: 'redis:alpine'
         ports:

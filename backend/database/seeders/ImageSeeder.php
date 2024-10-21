@@ -3,18 +3,16 @@
 namespace Database\Seeders;
 
 use App\Models\Image;
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Post;
 
-class PostSeeder extends Seeder
+class ImageSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Post::factory()->has(Image::factory()->count(2))->create();
+        Image::factory(20)->create();
     }
 }
