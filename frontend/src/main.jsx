@@ -7,7 +7,7 @@ import router from './router.jsx'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  <>
     <RouterProvider router={router}/>
-  </StrictMode>,
+  </>,
 )
