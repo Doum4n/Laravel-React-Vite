@@ -12,7 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->validateCsrfTokens(except: [
-            '/image/upload',
+            '/image/temp',
+            '/image/store',
+            '/post/create',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

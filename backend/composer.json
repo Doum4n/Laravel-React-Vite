@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "genealabs/laravel-caffeine": "*",
         "kreait/laravel-firebase": "^5.9",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9"
@@ -49,7 +50,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "laravel/dusk"
+            ]
         }
     },
     "config": {

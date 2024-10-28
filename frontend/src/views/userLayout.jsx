@@ -32,7 +32,7 @@ const Layout = () => {
   return (
     <>
     <Container fluid className="mt-2">
-      <Row>
+      {/* <Row>
         <Col sm="auto" className="d-flex align-items-center">
         <Image src={'./###'} style={{maxWidth: '50px'}} className="mb-2"/>
         <font size='3' className="m-2">
@@ -45,18 +45,17 @@ const Layout = () => {
             Account
           </Button>
         </Col>
-      </Row>
+      </Row> */}
       <Navbar bg="light" className="border rounded mb-3">
             <Navbar.Collapse>
-            <Nav>
-              <Nav.Link href="#home">Home</Nav.Link>
-                <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                  <NavItem>
-                    item
-                  </NavItem>
-                </NavDropdown>
-              </Nav>
+              <Navbar.Brand className="ms-3">
+                LOGO
+              </Navbar.Brand>
+              <input className="rounded-4 border-1"></input>
             </Navbar.Collapse>
+            <Button className="bg-dark border-0 me-2" onClick={AccountHandler}>
+            Account
+          </Button>
     </Navbar>
     </Container>
     <Outlet />

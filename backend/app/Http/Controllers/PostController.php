@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Support\Facades\DB;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Ramsey\Uuid\Type\Integer;
 
 class PostController extends Controller
 {
@@ -14,5 +18,27 @@ class PostController extends Controller
     {
         $post = Post::query()->where('id', $id)->firstOrFail();
         return response()->json($post, 200);
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function createPost(Request $request): JsonResponse
+    {
+        $post = Post::factory()->createOne([
+            'title' => $request->get('title'),
+            'content' => $request->input('content_post'),
+        ]);
+
+        session()->forget('temporary_images');
+
+        return response()->json(['id' => $post->id], 200);
+    }
+
+    public function getPost(int $id): JsonResponse
+    {
+        $post = Post::query()->where('user_id', $id)->firstOrFail();
+        return response()->json(['post' => $post]);
     }
 }

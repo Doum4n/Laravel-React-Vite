@@ -5,8 +5,8 @@ import GuestLayput from './views/guestLayout.jsx';
 import Register from './views/register.jsx';
 import Login from './views/login.jsx';
 import Account from './views/account.jsx';
-import Post from './views/post.jsx';
-import PostUpload from './views/postUpload.jsx';
+import Post from './views/post/post.jsx';
+import PostUpload from './views/post/postUpload.jsx';
 
 const router = createBrowserRouter([
     {

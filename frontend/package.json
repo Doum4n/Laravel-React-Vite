@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "proxy": "http://0.0.0.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -12,11 +13,14 @@
   "dependencies": {
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
+    "dompurify": "^3.1.7",
     "firebase": "^10.14.1",
+    "html-react-parser": "^5.1.18",
     "quill": "^2.0.2",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.5",
     "react-dom": "^18.3.1",
+    "react-native-htmlview": "^0.17.0",
     "react-quill": "^2.0.0",
     "react-router-dom": "^6.27.0"
   },

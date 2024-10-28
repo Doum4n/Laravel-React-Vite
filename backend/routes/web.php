@@ -28,7 +28,15 @@ use App\Http\Middleware\CorsMiddleware;
 Route::middleware([CorsMiddleware::class])->group(function () {
     Route::get('/test-db/{id}', [PostController::class, 'show']);
     Route::get('/test-firebase', [UserController::class, 'getById']);
-    Route::post('/image/upload', [ImageController::class, 'store']);
-    Route::get('/image/{id}', [ImageController::class, 'getImage']);
+
+    Route::post('/image/store', [ImageController::class, 'store']);
+    Route::post('/image/temp', [ImageController::class, 'storeTemp']);
+//    Route::get('/image/temp', [ImageController::class, 'getTempImage']);
+    Route::get('/get-image/{post_id}', [ImageController::class, 'getImage']);
+});
+
+Route::middleware([CorsMiddleware::class])->group(function () {
+    Route::post('/post/create', [PostController::class, 'createPost']);
+    Route::get('/get-post/{id}', [PostController::class, 'getPost']);
 });
 
