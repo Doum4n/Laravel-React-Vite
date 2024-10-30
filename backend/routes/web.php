@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -38,5 +39,8 @@ Route::middleware([CorsMiddleware::class])->group(function () {
 Route::middleware([CorsMiddleware::class])->group(function () {
     Route::post('/post/create', [PostController::class, 'createPost']);
     Route::get('/get-post/{id}', [PostController::class, 'getPost']);
+
+    Route::get('get/comment/{id}', [CommentController::class, 'getComments']);
+    Route::get('get/commentByPostId/{id}', [CommentController::class, 'getCommentByPostId']);
 });
 

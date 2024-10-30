@@ -3,12 +3,14 @@ import { useParams } from "react-router-dom";
 import DOMPurify from "dompurify";
 import { Button, Container, Form } from "react-bootstrap";
 import Comment from "../component/comment";
+import {Node, Tree} from "../component/TreeComment"
 
 const Post = () => {
 
     const [title, setTitle] = useState();
     const [content, setContent] = useState();
     const [photoUrl, setUrl] = useState([]);
+    const [comments, setComments] = useState([]);
 
     const {id} = useParams();
 
@@ -27,6 +29,20 @@ const Post = () => {
         console.error('There was a problem with the fetch operation:', error);
     });
 
+    // const getComments = async (comment_id) => {
+        fetch(`http://0.0.0.0/get/commentByPostId/26`)
+        .then(response => {
+            if(!response.ok){
+                throw new Error('Cant get comments');
+            }
+            return response.json();
+        }).then(data => {
+            setComments(data);
+        }).catch(error => {
+            console.Error(error);
+        });
+    // }
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -40,9 +56,16 @@ const Post = () => {
                 console.error('There was a problem with the fetch operation:', error);
             }
         };
-        
         fetchData();
     }, [id]);
+
+    const addToTree = (comment) => {
+        let root = new Tree(comment.id, comment.content);
+        for(let childComment of comment.children){
+            root.insert(root, childComment.id, childComment.content);
+            childComment.parent = root;
+        }
+    }
     
 
     return (
@@ -74,6 +97,8 @@ const Post = () => {
                     comment="Comment"
                 ></Comment>
             </div>
+
+
         </Container>
     )
 }
