@@ -38,7 +38,19 @@ class PostController extends Controller
 
     public function getPost(int $id): JsonResponse
     {
-        $post = Post::query()->where('user_id', $id)->firstOrFail();
+        $post = Post::query()->where('id', $id)->firstOrFail();
         return response()->json(['post' => $post]);
+    }
+
+    public function likePost(int $id): JsonResponse
+    {
+        Post::query()->find($id)->increaseLikes();
+        return response()->json('liked', 200);
+    }
+
+    public function getLikes(string $id): JsonResponse
+    {
+        $post = Post::query()->select('likes')->where('id', $id)->firstOrFail();
+        return response()->json(['likes' => $post->likes], 200);
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\interactionController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\DB;
@@ -39,8 +40,15 @@ Route::middleware([CorsMiddleware::class])->group(function () {
 Route::middleware([CorsMiddleware::class])->group(function () {
     Route::post('/post/create', [PostController::class, 'createPost']);
     Route::get('/get-post/{id}', [PostController::class, 'getPost']);
+    Route::get('/post/{id}/like', [PostController::class, 'likePost']);
+    Route::get('/post/{id}/likes', [PostController::class, 'getLikes']);
 
     Route::get('get/comment/{id}', [CommentController::class, 'getComments']);
     Route::get('get/commentByPostId/{id}', [CommentController::class, 'getCommentByPostId']);
+
+    Route::get('get/user', [UserController::class, 'getUser']);
+    Route::get('get/username/{id}', [UserController::class, 'getUsername']);
+
+    Route::put('interaction', [interactionController::class, 'update']);
 });
 

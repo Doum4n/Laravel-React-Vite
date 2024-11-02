@@ -25,4 +25,11 @@ class CommentController extends Controller
         $comment = Comment::with('children')->where('post_id', $id)->get();
         return response()->json($comment);
     }
+
+    public function createComment(Request $request): JsonResponse
+    {
+        Comment::factory()->createOne([
+            'user_id' => $request->user()->id,
+        ]);
+    }
 }

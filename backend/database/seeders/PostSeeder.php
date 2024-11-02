@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Image;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,6 +16,8 @@ class PostSeeder extends Seeder
      */
     public function run(): void
     {
-        Post::factory()->has(Image::factory()->count(2))->create();
+        Post::factory(16)
+            ->has(Image::factory()->count(2))
+            ->create();
     }
 }

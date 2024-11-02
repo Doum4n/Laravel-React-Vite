@@ -3,7 +3,7 @@ import { Nav, NavDropdown, NavItem, Row, Col, Button } from "react-bootstrap";
 import { Navbar } from "react-bootstrap";
 import {Container} from "react-bootstrap";
 import { Offcanvas } from "react-bootstrap";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { signInWithPopup } from "firebase/auth";
 import {Image} from "react-bootstrap";
 import {auth} from '../config/firebase'
@@ -11,41 +11,36 @@ import { GoogleProvider } from "../config/firebase";
 
 const Layout = () => {
 
-  const [show, setShow] = useState();
+  const [login, setLogin] = useState(false);
+  const [userPhoto, setUserPhoto] = useState(null);
 
-  const HandlerShow = () => setShow(true);
-  const HandlerClose = () => setShow(false);
-
-  const SignInWithGoogle = async () => {
+  useEffect(() => {
     try{
-      await signInWithPopup(auth, GoogleProvider);
-    }catch(e){
-      console.error(e);
-    }
-  }
+      auth.onAuthStateChanged(function(user){
+        if(user){
+          setUserPhoto(user.photoURL);
+          setLogin(true);
+        }else{
+          setLogin(false);
+        }
+      });
+    }catch(err){
+        console.error(err);
+    };
+  }); 
 
   const navigate = useNavigate();
-  const AccountHandler = () => {
-    navigate('/account');
+  const LoginHandler = () => {
+    navigate('/login');
+  }
+
+  const PostHandler = () => {
+    navigate('/post/upload');
   }
 
   return (
     <>
     <Container fluid className="mt-2">
-      {/* <Row>
-        <Col sm="auto" className="d-flex align-items-center">
-        <Image src={'./###'} style={{maxWidth: '50px'}} className="mb-2"/>
-        <font size='3' className="m-2">
-          slogan
-        </font>
-        </Col>
-
-        <Col className="d-flex align-items-center justify-content-end">
-          <Button className="bg-dark border-0" onClick={AccountHandler}>
-            Account
-          </Button>
-        </Col>
-      </Row> */}
       <Navbar bg="light" className="border rounded mb-3">
             <Navbar.Collapse>
               <Navbar.Brand className="ms-3">
@@ -53,9 +48,15 @@ const Layout = () => {
               </Navbar.Brand>
               <input className="rounded-4 border-1"></input>
             </Navbar.Collapse>
-            <Button className="bg-dark border-0 me-2" onClick={AccountHandler}>
-            Account
-          </Button>
+            <Button className="me-2" onClick={PostHandler}>
+              Post
+            </Button>
+            { !login && <Button className="bg-dark border-0 me-2" onClick={LoginHandler}>
+            Login
+          </Button>}
+            { login && 
+              <Image src={userPhoto} style={{width: '50px'}} className="me-2" onClick={() => navigate('/account')} roundedCircle/>
+            }
     </Navbar>
     </Container>
     <Outlet />

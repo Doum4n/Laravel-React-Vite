@@ -17,6 +17,18 @@ const router = createBrowserRouter([
                 path: '/home',
                 element: <Home/>,
             },
+            {
+                path: 'post/upload',
+                element: <PostUpload/>
+            },
+            {
+                path: '/post/:id',
+                element: <Post/>
+            },
+            {
+                path: 'account',
+                element: <Account/>
+            },
         ],
     },
 
@@ -32,20 +44,9 @@ const router = createBrowserRouter([
                 path: '/register',
                 element: <Register/>
             },
-            {
-                path: '/post/:id',
-                element: <Post/>
-            }
+           
         ],
     },
-    {
-        path: 'account',
-        element: <Account/>
-    },
-    {
-        path: 'post/upload',
-        element: <PostUpload/>
-    }
 ])
 
 export default router;

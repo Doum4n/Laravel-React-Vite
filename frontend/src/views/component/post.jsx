@@ -10,10 +10,10 @@ const Post = ({ id, title, image, description }) => {
     }
 
     return (
-        <div className="post-card" onClick={PostHandler}>
-        <img src={image} alt={title} className="img-fluid"/>
-        <h2 className="post-title">{title}</h2>
-        <p className="post-description">{description}</p>
+        <div onClick={PostHandler}>
+            <img src={image} alt={title} className="img-fluid"/>
+            <h2 className="post-title">{title}</h2>
+            <p className="post-description">{description}</p>
         </div>
     );
 };

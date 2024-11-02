@@ -1,5 +1,5 @@
 import { Container, Row, Col } from "react-bootstrap"
-import { Image, Form } from "react-bootstrap"; 
+import { Image, Form } from "react-bootstrap";
 
 const Comment = ({ImageSrc, nameUser, comment}) => {
     return (

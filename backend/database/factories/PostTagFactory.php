@@ -3,23 +3,24 @@
 namespace Database\Factories;
 
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Image>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post_Tag>
  */
-class ImageFactory extends Factory
+class PostTagFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
-//     */
+     */
     public function definition(): array
     {
         return [
-            'path' => $this->faker->imageUrl(),
             'post_id' => Post::all()->random()->id,
+            'tag_id' => Tag::all()->random()->id,
         ];
     }
 }

@@ -49,10 +49,10 @@ class ImageController extends Controller
     {
         $images = Image::query()->select('path')->where('post_id', $id)->get();
 
-        $urls = array_map(function($image) {
-            return Storage::url($image['path']);
-        }, $images->toArray());
-        return response()->json(['url' => $urls]);
+//        $urls = array_map(function($image) {
+//            return Storage::url($image['path']);
+//        }, $images->toArray());
+        return response()->json(['url' => $images]);
     }
 
     public function deleteImage(String $id): void

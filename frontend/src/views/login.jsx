@@ -1,4 +1,4 @@
-import { Container, FormControl, FormGroup, InputGroup } from "react-bootstrap"
+import { Container, FormControl, FormGroup, InputGroup, Alert } from "react-bootstrap"
 import React from "react";
 import Button from 'react-bootstrap/Button';
 import {auth} from '../config/firebase'
@@ -7,10 +7,23 @@ import { signInWithPopup } from "firebase/auth";
 import { Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { Form } from "react-bootstrap";
+import firebase from "firebase/compat/app";
+import 'firebase/auth';
+import { useState } from "react";
 
 const Login = () => {
 
+    const [loginStatus, setLoginStatus] = useState(null); // null, 'success' hoặc 'error'
+
     const navigate = useNavigate();
+
+    const getToken = () => {
+        auth.onAuthStateChanged(function(user){
+            console.log(user.displayName);
+            navigate('/home');
+        })
+    }
+
     const RegisterHandler = () => {
         navigate('/register');
     }
@@ -18,7 +31,10 @@ const Login = () => {
     const SignInWithGoogle = async () => {
         try{
             await signInWithPopup(auth, GoogleProvider);
+            setLoginStatus('success');
+            getToken();
         }catch(e){
+            setLoginStatus('error');
             console.error(e);
         }
     }
@@ -64,6 +80,17 @@ const Login = () => {
                             <Button variant="outline-primary" onClick={RegisterHandler}>Sign up</Button>
                         </div>
                         <Button variant="link" className="w-100" onClick={SignInWithGoogle}>Sign in with google</Button>
+
+                        {loginStatus === 'success' && (
+                        <Alert variant='success'>
+                            Login successfully
+                        </Alert>
+                        )}
+                        {loginStatus === 'error' && (
+                            <Alert variant='danger'>
+                                Login failed
+                            </Alert>
+                        )}
                     </Form>
                 </Card>
             </Container>
