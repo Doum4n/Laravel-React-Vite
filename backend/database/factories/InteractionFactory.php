@@ -21,11 +21,11 @@ class InteractionFactory extends Factory
     {
         $commentIds = Comment::query()->pluck('id')->toArray();
         return [
-            'user_id' => User::all()->random()->id,
+            'user_id' => User::all()->random()->uuid,
             'post_id' => Post::all()->random()->id,
-            'comment_id' => count($commentIds) > 0 ? $this->faker->optional(0.3)->randomElement($commentIds) : null,
             'like' => $this->faker->boolean(),
             'save' => $this->faker->boolean(),
+            'share' => $this->faker->boolean(),
         ];
     }
 }

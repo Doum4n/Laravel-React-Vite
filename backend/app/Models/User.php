@@ -12,6 +12,7 @@ class User extends Model
     use HasFactory;
 
     protected  $fillable = [
+        'uuid',
         'name',
         'email',
         'email_verified_at',

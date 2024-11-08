@@ -18,6 +18,7 @@ class Post extends Model
         'content',
         'user_id',
         'likes',
+        'views',
     ];
 
     public function image(): HasMany{
@@ -31,5 +32,10 @@ class Post extends Model
     public function increaseLikes(): void
     {
         $this->increment('likes');
+    }
+
+    public function  increaseViews(): void
+    {
+        $this->increment('views');
     }
 }

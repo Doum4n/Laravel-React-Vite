@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container, Form, Modal } from 'react-bootstrap';
+import { Button, Container, Form, FormControl, FormGroup, InputGroup, Modal } from 'react-bootstrap';
 import 'react-quill/dist/quill.snow.css';
 import { useRef } from 'react';
 import Editor from './Editor';
@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import Quill from 'quill/dist/quill.js';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../../config/firebase';
 const Delta = Quill.import('delta');
 
 const UploadFile = () => {
@@ -27,7 +28,8 @@ const UploadFile = () => {
 
   const [title, setTitle] = useState('');
 
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(false);
+  const [uuid, setUuid] = useState('');
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -36,6 +38,18 @@ const UploadFile = () => {
       handleSubmit(file);
     }
   };
+
+  useEffect(() => {
+    try{
+      auth.onAuthStateChanged(function(user){
+        if(user){
+          setUuid(user.uid);
+        }
+      });
+    }catch(err){
+        console.error(err);
+    };
+  }); 
 
   const handleGetHTML = (html) => {
     setHtmlContent(html);
@@ -92,7 +106,7 @@ const UploadFile = () => {
       body: JSON.stringify({
         title : title,
         content_post : htmlContent,
-        path : url
+        user_id : uuid
       }),
     })
     .then((response) => response.json())
@@ -123,6 +137,15 @@ const UploadFile = () => {
     <Container className='mt-3'>
       <Form>
         <Form.Control type='text' placeholder='Title' className='mb-3' onChange={(e) => setTitle(e.target.value)} />
+        <FormGroup>
+          <InputGroup className="mb-3">
+            <InputGroup.Text>Tag</InputGroup.Text>
+            <FormControl
+              type="text"
+              placeholder="Tag"
+            />
+          </InputGroup>
+        </FormGroup>
         <Form.Control type="file" onChange={handleFileChange} className='mb-3'/>
         {url && <img src={`http://0.0.0.0/storage/${url}`} alt="Uploaded" className='mb-3' />}
 

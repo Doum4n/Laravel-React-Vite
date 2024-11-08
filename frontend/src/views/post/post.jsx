@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import DOMPurify from "dompurify";
 import { Button, ButtonGroup, Container, Form, Image, Row, Col, Badge } from "react-bootstrap";
 import Comment from "../component/comment";
+import { auth } from "../../config/firebase";
 
 const Post = () => {
 
@@ -10,8 +11,27 @@ const Post = () => {
     const [content, setContent] = useState();
     const [photoUrl, setUrl] = useState([]);
     const [comments, setComments] = useState([]);
+    const [tagIds, setTagIds] = useState([]);
     const [likes, setLikes] = useState();
     const [isLike, setLike] = useState(false);
+
+    const [user_id, setUserId]  = useState('');
+    const [commentContent, setCommentContent] = useState('');
+    const [showSubComment, setShowSubComment] = useState(false);
+
+    const [tags, setTags] = useState({});
+
+    useEffect(() => {
+        try{
+          auth.onAuthStateChanged(function(user){
+            if(user){
+              setUserId(user.uid);
+            }
+          });
+        }catch(err){
+            console.error(err);
+        };
+      }); 
 
     const { id } = useParams();
 
@@ -39,6 +59,32 @@ const Post = () => {
     }, [id]);
 
     useEffect(() => {
+        fetch(`http://0.0.0.0/post/${id}/tags`)
+            .then(response => {
+                if (!response.ok) throw new Error('Cant get tags');
+                return response.json();
+            })
+            .then(data => {
+                data.forEach(tagId => getTagNameById(tagId));
+                setTagIds(data);
+                console.log(data);
+            })
+            .catch(error => console.error(error));
+    }, [id]);
+
+    const getTagNameById = (id) => {
+        fetch(`http://0.0.0.0/tag/${id}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Cant get tags');
+            return response.json();
+        })
+        .then(tagName => {
+            setTags((prev) => ({...prev, [id]: tagName}));
+        })
+        .catch(error => console.error(error));
+    }
+
+    useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch(`http://0.0.0.0/get-image/${id}`);
@@ -52,7 +98,6 @@ const Post = () => {
         fetchData();
     }, [id]);
 
-    // Component hiển thị bình luận kèm username
     const GetComment = ({ comment }) => {
         const [username, setUsername] = useState("Unknown User");
 
@@ -72,9 +117,11 @@ const Post = () => {
 
         return (
             <Comment
+                updated_at={comment.updated_at}
                 nameUser={username}
                 ImageSrc="http://0.0.0.0/storage/images/piLImcuVtFrAne46IjKye6B8PCtNtO5CKyGGqfTE.png"
                 comment={comment.content}
+                id={comment.id}
             />
         );
     };
@@ -87,7 +134,10 @@ const Post = () => {
             }
             setLikes(prevLikes => prevLikes + 1);
         });
+        Interact('like');
+    }
 
+    const Interact = async (interact) => {
         await fetch(`http://0.0.0.0/interaction`, {
             method: 'PUT',
             headers: {
@@ -95,9 +145,8 @@ const Post = () => {
             },
             body: JSON.stringify({
                 post_id: id,
-                user_id: 30,
-                action: 'like',
-                like: true,
+                user_id: user_id,
+                action: interact,
             })
         })
         .then(response => {
@@ -125,6 +174,50 @@ const Post = () => {
         });
     }, [id]);
 
+    useEffect(() => {
+        fetch(`http://0.0.0.0/post/${id}/view`)
+            .then(response => {
+                if(!response.ok){
+                    throw new Error("Cant increase this post!")
+                }
+                return response.json();
+            }).catch(err => {
+                console.error(err);
+        });
+    }, [id]);
+
+    const postComment = async () => {
+        await fetch(`http://0.0.0.0/comment/create`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json',
+                },
+                body: JSON.stringify ({
+                    user_id: user_id,
+                    post_id: id,
+                    content: commentContent,
+                    parent_id: null
+                })
+            }
+        )
+            .then(response => {
+                if(!response.ok){
+                    throw new Error("Cant post this comment!")
+                }
+                return response.json();
+            }).then(data => {
+                console.log(data);
+            }).catch(err => {
+                console.error(err);
+        });
+    }
+
+    const commentChange = (e) => {
+        setCommentContent(e.target.value);
+        console.log(commentContent);
+    }
+
     return (
         <Container>
             <h1 className="mb-3">{title}</h1>
@@ -139,8 +232,9 @@ const Post = () => {
                 </div>
             </Row>
 
-            <Badge bg="primary">#tag</Badge>
-
+            {tagIds.map((tagId) => (
+                <Badge bg="primary" className="me-1">#{tags[tagId]}</Badge>
+            ))}
             <div className="mt-2">
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />           
                 <br />
@@ -168,21 +262,23 @@ const Post = () => {
                         });
                     }
                 }>comment</Button>
-                <Button variant="primary">share</Button>
+                <Button variant="primary" onClick={() => Interact('share')}>share</Button>
             </div>
 
             <Form className="mt-3" id="comment">
                 <Form.Group>
-                    <Form.Control as="textarea" rows={3} placeholder="Comment..."></Form.Control>
+                    <Form.Control as="textarea" rows={3} placeholder="Comment..." onChange={commentChange}></Form.Control>
                 </Form.Group>
                 <div className="d-flex justify-content-end mt-3">
-                    <Button>Send</Button>
+                    <Button onClick={postComment}>Send</Button>
                 </div>
             </Form>
             <div>
                 {comments.map((comment) => (
-                    <div key="comment.id">
-                        <GetComment comment={comment}/>
+                    <div key={comment.id}>
+                        {comment.parent_id === null ? (
+                            <GetComment comment={comment}/>
+                        ) : null}
                         {comment.children.length > 0 ? (
                            comment.children.map((childComment) => (
                             <div style={{ marginLeft: '70px' }}>

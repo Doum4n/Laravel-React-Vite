@@ -12,13 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('interactions', function (Blueprint $table) {
-            $table->unsignedBigInteger('comment_id')->nullable();
             $table->foreignId('post_id')->constrained('posts')->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreign('comment_id')->references('id')->on('comments')->cascadeOnDelete();
+            $table->foreignUuid('user_id')->constrained('users', 'uuid')->cascadeOnDelete();
             $table->primary(['post_id', 'user_id']);
             $table->boolean('save')->default(false);
             $table->boolean('like')->default(false);
+            $table->boolean('share')->default(false);
             $table->timestamps();
         });
     }

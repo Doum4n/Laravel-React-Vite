@@ -29,6 +29,7 @@ class PostController extends Controller
         $post = Post::factory()->createOne([
             'title' => $request->get('title'),
             'content' => $request->input('content_post'),
+            'user_id' => $request->input('user_id'),
         ]);
 
         session()->forget('temporary_images');
@@ -52,5 +53,33 @@ class PostController extends Controller
     {
         $post = Post::query()->select('likes')->where('id', $id)->firstOrFail();
         return response()->json(['likes' => $post->likes], 200);
+    }
+
+    public function getPostByUuid(string $uuid): JsonResponse
+    {
+        $post = Post::query()->where('user_id', $uuid)->get();
+        return response()->json(['post' => $post]);
+    }
+
+    public function viewPost(int $id): JsonResponse
+    {
+        Post::query()->find($id)->increaseViews();
+        return response()->json('view', 200);
+    }
+
+    public function getMostViewedPosts(): JsonResponse
+    {
+        $post = Post::query()->orderBy('views', 'desc')->take(8)->get();
+        return response()->json(['posts' => $post]);
+    }
+
+    public function getFeaturedPosts(): JsonResponse
+    {
+        $post = Post::query()
+            ->orderBy('views', 'desc')
+            ->orderBy('likes', 'desc')
+            ->take(6)
+            ->get();
+        return response()->json(['posts' => $post]);
     }
 }

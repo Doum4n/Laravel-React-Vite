@@ -2,7 +2,7 @@ import { Container, FormControl, FormGroup, InputGroup, Alert } from "react-boot
 import React from "react";
 import Button from 'react-bootstrap/Button';
 import {auth} from '../config/firebase'
-import { GoogleProvider } from "../config/firebase";
+import { GoogleProvider, db } from "../config/firebase";
 import { signInWithPopup } from "firebase/auth";
 import { Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,8 @@ import { Form } from "react-bootstrap";
 import firebase from "firebase/compat/app";
 import 'firebase/auth';
 import { useState } from "react";
+import { ref, set, get } from "firebase/database";
+import { fetchSignInMethodsForEmail } from "firebase/auth";
 
 const Login = () => {
 
@@ -28,16 +30,31 @@ const Login = () => {
         navigate('/register');
     }
 
-    const SignInWithGoogle = async () => {
-        try{
-            await signInWithPopup(auth, GoogleProvider);
-            setLoginStatus('success');
-            getToken();
-        }catch(e){
-            setLoginStatus('error');
-            console.error(e);
+    
+    const signInWithGoogle = async () => {
+        try {
+          const result = await signInWithPopup(auth, GoogleProvider);
+          const user = result.user;
+
+          const userRef = ref(db, 'users/' + user.uid);
+          const snapshot = await get(userRef);
+
+          if(snapshot.exists()){
+            console.log('User has existed!');
+            navigate('/home');
+          }else{
+            await set(ref(db, 'users/' + user.uid), {
+                username: user.displayName,
+                email: user.email,
+                photoURL: user.photoURL
+              });
+            console.log('Add user successfully');
+            navigate('/create');
+          }
+        } catch (error) {
+          console.error("Error signing in with Google:", error);
         }
-    }
+      };
 
     return (
         <>
@@ -79,8 +96,8 @@ const Login = () => {
                             <Button className="me-2" variant="primary" type="sublit">Sign in</Button>
                             <Button variant="outline-primary" onClick={RegisterHandler}>Sign up</Button>
                         </div>
-                        <Button variant="link" className="w-100" onClick={SignInWithGoogle}>Sign in with google</Button>
-
+                        <Button variant="link" className="w-100" onClick={signInWithGoogle}>Sign in with google</Button>
+{/* 
                         {loginStatus === 'success' && (
                         <Alert variant='success'>
                             Login successfully
@@ -90,7 +107,7 @@ const Login = () => {
                             <Alert variant='danger'>
                                 Login failed
                             </Alert>
-                        )}
+                        )} */}
                     </Form>
                 </Card>
             </Container>

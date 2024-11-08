@@ -18,9 +18,9 @@ class UserController extends Controller
         echo $response->displayName;
     }
 
-    public function getUsername($id): JsonResponse
+    public function getUsername($uuid): JsonResponse
     {
-        $username = User::query()->where('id', $id)->value('name');
+        $username = User::query()->where('uuid', $uuid)->value('name');
         return response()->json($username);
     }
     public function getUser(Request $request, Auth $auth): JsonResponse
@@ -40,4 +40,14 @@ class UserController extends Controller
         }
     }
 
+    public function createUser(Request $request): JsonResponse
+    {
+        User::factory()->createOne([
+           'uuid' => $request->input('id'),
+           'name' => $request->input('name'),
+           'email' => $request->input('email'),
+        ]);
+
+        return response()->json('Create user successfully!');
+    }
 }

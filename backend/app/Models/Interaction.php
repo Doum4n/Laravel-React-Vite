@@ -15,9 +15,9 @@ class Interaction extends Model
     protected $fillable = [
         'user_id',
         'post_id',
-        'comment_id',
         'like',
-        'save'
+        'save',
+        'share'
     ];
 
     public function user(): BelongsTo{

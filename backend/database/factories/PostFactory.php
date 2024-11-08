@@ -23,7 +23,9 @@ class PostFactory extends Factory
         return [
             'title' => $this->faker->sentence(),
             'content' => $this->faker->paragraphs(5, true),
-            'user_id' => User::all()->random()->id,
+            'user_id' => User::all()->random()->uuid,
+            'views' => $this->faker->randomDigit(),
+            'likes' => $this->faker->randomDigit(),
         ];
     }
 }

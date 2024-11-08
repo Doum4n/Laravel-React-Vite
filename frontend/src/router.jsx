@@ -7,6 +7,7 @@ import Login from './views/login.jsx';
 import Account from './views/account.jsx';
 import Post from './views/post/post.jsx';
 import PostUpload from './views/post/postUpload.jsx';
+import Create_account from './views/create_acount.jsx';
 
 const router = createBrowserRouter([
     {
@@ -44,7 +45,10 @@ const router = createBrowserRouter([
                 path: '/register',
                 element: <Register/>
             },
-           
+            {
+                path: '/create',
+                element: <Create_account/>
+            }
         ],
     },
 ])

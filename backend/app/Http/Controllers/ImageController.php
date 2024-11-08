@@ -55,6 +55,12 @@ class ImageController extends Controller
         return response()->json(['url' => $images]);
     }
 
+    public function getImageOnce(String $id): JsonResponse
+    {
+        $images = Image::query()->where('post_id', $id)->first()->path;
+        return response()->json(['url' => $images]);
+    }
+
     public function deleteImage(String $id): void
     {
         Storage::disk('public')->delete($id);

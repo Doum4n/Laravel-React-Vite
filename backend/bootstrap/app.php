@@ -15,7 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
             '/image/temp',
             '/image/store',
             '/post/create',
-            'interaction'
+            'interaction',
+            'user/create',
+            'comment/create'
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

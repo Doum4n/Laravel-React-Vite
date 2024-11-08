@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('parent_id')->nullable();
-           $table->foreignId('user_id')->constrained('users');
+           $table->foreignUuid('user_id')->constrained('users', 'uuid')->cascadeOnDelete();
            $table->foreign('parent_id')->references('id')->on('comments');
            $table->foreignId('post_id')->constrained('posts')->cascadeOnDelete();
 //           $table->primary(['user_id', 'post_id', 'parent_id']);
