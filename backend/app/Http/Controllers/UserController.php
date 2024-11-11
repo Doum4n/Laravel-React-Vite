@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -46,8 +47,24 @@ class UserController extends Controller
            'uuid' => $request->input('id'),
            'name' => $request->input('name'),
            'email' => $request->input('email'),
+            'photoUrl' => $request->input('photoUrl'),
         ]);
 
         return response()->json('Create user successfully!');
+    }
+
+    public function getPhotoById($uuid): JsonResponse
+    {
+        $photo = User::query()->where('uuid', $uuid)->value('photoUrl');
+        return response()->json($photo);
+    }
+
+    public function updatePhoto(Request $request): JsonResponse
+    {
+        User::query()
+            ->where('uuid', $request->input('id'))
+            ->update(['photoUrl' => $request->input('photoUrl'),
+        ]);
+        return response()->json('Create user photo successfully!');
     }
 }

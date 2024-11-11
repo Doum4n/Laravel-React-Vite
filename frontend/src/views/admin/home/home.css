@@ -1,0 +1,30 @@
+.home {
+    display: flex;
+    margin: 10px;
+}
+
+.homeContainer {
+    flex: 6;
+}
+
+.amount {
+    margin-left: 1.25rem;
+    height: 100px;
+    width: 100%;
+    background-color:blueviolet;
+    float: left;
+}
+
+p {
+    position: relative;
+    top: 10px;
+    left: 10px;
+    margin: 0;
+}
+
+h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}

@@ -17,7 +17,7 @@ const subPost = ({ id, title, image, content }) => {
             <Row>
                 <hr/>
                 <Col md={6}>
-                    <h3 className="post-title">{title}</h3>
+                    <h4 className="post-title">{title}</h4>
                     <p className="post-description">{description + "..."}</p>
                 </Col>
                 <Col>

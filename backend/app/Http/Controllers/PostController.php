@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Ramsey\Uuid\Type\Integer;
+use function Laravel\Prompts\select;
 
 class PostController extends Controller
 {
@@ -39,7 +40,13 @@ class PostController extends Controller
 
     public function getPost(int $id): JsonResponse
     {
-        $post = Post::query()->where('id', $id)->firstOrFail();
+        //SELECT p.*, i.path FROM `posts` as p JOIN `images` as i on p.id = i.post_id WHERE p.id = 1
+        $post = DB::table('posts')
+            ->join('images', 'images.post_id', '=', 'posts.id')
+            ->select('images.path', 'posts.*')
+            ->where('posts.id', $id)
+            ->first();
+//        $post = Post::query()->join('images', 'posts.id', '=', 'images.post_id')->where('id', $id)->select()->firstOrFail();
         return response()->json(['post' => $post]);
     }
 
@@ -69,7 +76,13 @@ class PostController extends Controller
 
     public function getMostViewedPosts(): JsonResponse
     {
-        $post = Post::query()->orderBy('views', 'desc')->take(8)->get();
+        $post = DB::table('images')
+            ->join('posts', 'images.post_id', '=', 'posts.id')
+            ->selectRaw('posts.*, max(images.path) as path')
+            ->orderBy('posts.views', 'desc')
+            ->groupBy('posts.id')
+            ->limit(10)
+            ->get();
         return response()->json(['posts' => $post]);
     }
 
@@ -81,5 +94,31 @@ class PostController extends Controller
             ->take(6)
             ->get();
         return response()->json(['posts' => $post]);
+    }
+
+    public function getPostByTopicId(int $topicId): JsonResponse
+    {
+        $post = DB::table('posts')
+            ->join('post_tag', 'posts.id', '=', 'post_tag.post_id')
+            ->join('tags', 'post_tag.tag_id', '=', 'tags.id')
+            ->join('topics', 'tags.topic_id', '=', 'topics.id')
+            ->join('images', 'posts.id', '=', 'images.post_id')
+            ->where('topics.id', $topicId)
+            ->select('posts.*', 'images.path', 'topics.name as topic_name')
+            ->limit(3)
+            ->get();
+        return response()->json($post);
+    }
+
+    public function getRecentPosts(): JsonResponse
+    {
+//        $post = Post::query()->orderBy('created_at', 'desc')->take(6)->get();
+        $post = DB::table('images')
+            ->join('posts', 'images.post_id', '=', 'posts.id')
+            ->select('images.path', 'posts.*')
+            ->orderBy('posts.created_at', 'desc')
+            ->limit(10)
+            ->get();
+        return response()->json($post);
     }
 }

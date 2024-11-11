@@ -15,5 +15,6 @@ class Tag extends Model
     protected $fillable = [
         'id',
         'name',
+        'topic_id'
     ];
 }

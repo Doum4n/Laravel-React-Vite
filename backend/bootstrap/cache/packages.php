@@ -1,20 +1,9 @@
 <?php return array (
-  'genealabs/laravel-caffeine' => 
+  'laravel/pail' => 
   array (
     'providers' => 
     array (
-      0 => 'GeneaLabs\\LaravelCaffeine\\Providers\\Service',
-    ),
-  ),
-  'kreait/laravel-firebase' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Kreait\\Laravel\\Firebase\\ServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'Firebase' => 'Kreait\\Laravel\\Firebase\\Facades\\Firebase',
+      0 => 'Laravel\\Pail\\PailServiceProvider',
     ),
   ),
   'laravel/sail' => 

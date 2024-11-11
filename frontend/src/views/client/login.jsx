@@ -1,8 +1,8 @@
 import { Container, FormControl, FormGroup, InputGroup, Alert } from "react-bootstrap"
 import React from "react";
 import Button from 'react-bootstrap/Button';
-import {auth} from '../config/firebase'
-import { GoogleProvider, db } from "../config/firebase";
+import {auth} from '../../config/firebase'
+import { GoogleProvider, db } from "../../config/firebase";
 import { signInWithPopup } from "firebase/auth";
 import { Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";

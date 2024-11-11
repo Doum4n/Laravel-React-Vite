@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import Quill from 'quill/dist/quill.js';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../../config/firebase';
+import { auth } from '../../../config/firebase';
 const Delta = Quill.import('delta');
 
 const UploadFile = () => {

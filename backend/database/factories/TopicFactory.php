@@ -2,13 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\Topic;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tag>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Topic>
  */
-class TagFactory extends Factory
+class TopicFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,7 +18,6 @@ class TagFactory extends Factory
     {
         return [
             'name' => $this->faker->word(),
-            'topic_id' => Topic::all()->random()->id,
         ];
     }
 }

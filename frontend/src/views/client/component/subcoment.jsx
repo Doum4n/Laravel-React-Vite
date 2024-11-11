@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap"
 import { Image, Form } from "react-bootstrap";
-import { auth } from "../../config/firebase";
+import { auth } from "../../../config/firebase";
 import { useParams } from "react-router-dom";
 
 const SubComment = ({ImageSrc, nameUser, parent_id}) => {

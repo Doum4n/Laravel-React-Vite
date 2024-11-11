@@ -1,11 +1,11 @@
 import { Button, Card, Container, Modal, Image, Tabs, Tab } from "react-bootstrap";
-import { auth } from "../config/firebase";
+import { auth } from "../../config/firebase";
 import { signOut } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { useHref, useNavigate } from "react-router-dom";
-import cover from '../assets/cover.png';
+import cover from '../../assets/cover.png';
 import { setUserId } from "firebase/analytics";
-import Post_by_user from "./component/account/post_by_user";
+import Post_by_user from './component/account/post_by_user'
 import Comment_by_user from './component/account/comment_by_user';
 import SharedPost from "./component/account/shared_post";
 

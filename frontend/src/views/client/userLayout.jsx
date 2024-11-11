@@ -6,9 +6,9 @@ import { Offcanvas } from "react-bootstrap";
 import React, { useEffect, useState } from 'react';
 import { signInWithPopup, signOut } from "firebase/auth";
 import { Image } from "react-bootstrap";
-import { auth } from '../config/firebase'
-import { GoogleProvider } from "../config/firebase";
-import img from '../assets/user.png';
+import { auth } from '../../config/firebase'
+import { GoogleProvider } from "../../config/firebase";
+import img from '../../assets/user.png';
 
 const Layout = () => {
 

@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\interactionController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostTagController;
+use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +48,8 @@ Route::middleware([CorsMiddleware::class])->group(function () {
     Route::get('/post/user/{id}', [PostController::class, 'getPostByUuid']);
     Route::get('/post/most-viewed', [PostController::class, 'getMostViewedPosts']);
     Route::get('/post/Featured', [PostController::class, 'getFeaturedPosts']);
+    Route::get('/post/topic/{id}', [PostController::class, 'getPostByTopicId']);
+    Route::get('/posts/recent', [PostController::class, 'getRecentPosts']);
 
     Route::get('get/comment/{id}', [CommentController::class, 'getComments']);
     Route::get('get/commentByPostId/{id}', [CommentController::class, 'getCommentByPostId']);
@@ -55,11 +59,18 @@ Route::middleware([CorsMiddleware::class])->group(function () {
     Route::get('get/user', [UserController::class, 'getUser']);
     Route::get('get/username/{id}', [UserController::class, 'getUsername']);
     Route::post('user/create', [UserController::class, 'createUser']);
+    Route::get('get/user/photo/{id}', [UserController::class, 'getPhotoById']);
+    Route::put('user/update/photo', [UserController::class, 'updatePhoto']);
 
     Route::put('interaction', [interactionController::class, 'update']);
     Route::get('interact/share/{id}', [interactionController::class, 'getPostsSharedByUser']);
 
     Route::get('/post/{id}/tags', [PostTagController::class, 'getTagsByPostId']);
     Route::get('/tag/{id}', [PostTagController::class, 'getTagNameByTagId']);
+
+    Route::get('/topics', [TopicController::class, 'index']);
+
+    //ADMIN
+    Route::get('/statistical', [AdminController::class, 'getStatistical']);
 });
 
